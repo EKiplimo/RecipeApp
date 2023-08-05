@@ -15,13 +15,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.recipeapp.navigation.Screens
+import com.example.recipeapp.viewmodel.RoomRecipeViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,8 +60,23 @@ fun RecipeAppBar(
 fun RecipeApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    viewModel: RecipeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: RecipeViewModel = viewModel(),
+    roomRecipeViewModel: RoomRecipeViewModel
 ) {
+
+    val recipeListState = roomRecipeViewModel.recipeListFlow.collectAsState(
+        initial = listOf()
+    )
+
+
+//    LaunchedEffect(key1 = true) {
+//        if (recipeListState.value.isEmpty()) {
+//            RecipeDatasource.recipes.forEach { recipe ->
+//                roomRecipeViewModel.addRecipe(recipe)
+//            }
+//        }
+//    }
+
 
     val recipeState by viewModel.uiState.collectAsState()
 
@@ -101,12 +117,15 @@ fun RecipeApp(
                     viewModel = viewModel,
                     cardClick = {
                         navController.navigate(Screens.Recipe.name)
-                    }
+                    },
+                    roomRecipeViewModelAbstract = roomRecipeViewModel,
+                    navHostController = navController
                 )
             }
 
             composable(route = Screens.Recipe.name) {
-                RecipeScreen(recipe = recipeState)
+                RecipeScreen(viewModel = viewModel,
+                roomRecipeViewModelAbstract = roomRecipeViewModel)
             }
 
 

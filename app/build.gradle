@@ -1,7 +1,10 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
 }
+
 
 android {
     namespace 'com.example.recipeapp'
@@ -68,6 +71,24 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1'
     implementation 'androidx.navigation:navigation-compose:2.6.0'
 
+
+    // room db
+    implementation("androidx.room:room-runtime:2.5.2")
+    annotationProcessor("androidx.room:room-compiler:2.5.2")
+    kapt "androidx.room:room-compiler:2.5.2"
+    implementation("androidx.room:room-ktx:2.5.2")
+
+    // hilt
+    implementation "com.google.dagger:hilt-android:2.44"
+    kapt "com.google.dagger:hilt-compiler:2.44"
+
+    //Gson for type conversions
+    implementation "com.google.code.gson:gson:2.10.1"
+
+
+    // Coil for loading images from the web
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
     implementation("com.google.accompanist:accompanist-pager:0.30.1")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.30.1")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
@@ -83,3 +104,4 @@ dependencies {
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
 }
+
